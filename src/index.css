@@ -1,8 +1,20 @@
 @import "tailwindcss";
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 @theme {
   --color-background: #0d0d0d;
   --color-primary: #f4b400;
   --color-primary-hover: #e0a800;
   --color-text: #f5f5f5;
   --color-muted: #bdbdbd;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes heroZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
 }

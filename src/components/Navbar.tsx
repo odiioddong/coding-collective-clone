@@ -1,107 +1,111 @@
 import { useState, useEffect, useCallback } from "react";
 import { Menu, X } from "lucide-react";
+import logo from "../assets/Logo.png";
 
-// Daftar menu navigasi. Disimpan sebagai konstanta di luar komponen
-// agar tidak dibuat ulang setiap kali komponen melakukan re-render,
-// dan memudahkan penambahan/pengurangan menu di masa depan.
 const NAV_LINKS = [
-  { label: "Home", href: "#home" },
+  { label: "About Us", href: "#about" },
   { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Industries", href: "#industries" },
+  { label: "Community", href: "#community" },
+  { label: "Contact Us", href: "#contact" },
 ] as const;
 
-// Batas scroll (dalam px) sebelum navbar berubah menjadi solid.
-const SCROLL_THRESHOLD = 50;
-
 const Navbar = () => {
-  // Menandai apakah halaman sudah di-scroll melewati threshold.
   const [isScrolled, setIsScrolled] = useState(false);
-  // Menandai apakah menu mobile sedang terbuka.
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("#home");
 
-  // Mendengarkan event scroll untuk mengubah tampilan navbar.
+  // Efek Scroll (Transparan vs Solid)
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
-    };
-
-    // Jalankan sekali di awal, untuk menangani kasus halaman
-    // yang sudah dalam posisi ter-scroll saat pertama kali dimuat.
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     handleScroll();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Menangani klik pada menu: melakukan smooth scroll ke section
-  // yang dituju, lalu menutup menu mobile (jika sedang terbuka).
-  const handleNavClick = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      event.preventDefault();
+  // Efek Scroll Spy (deteksi section yang sedang dilihat)
+  useEffect(() => {
+    const handleScrollSpy = () => {
+      const scrollPos = window.scrollY + 100;
 
-      const targetElement = document.querySelector(href);
-      targetElement?.scrollIntoView({ behavior: "smooth" });
+      // Kalau sudah mentok di bawah halaman, aktifkan menu terakhir (Contact Us)
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 50;
+      if (atBottom) {
+        setActiveSection(NAV_LINKS[NAV_LINKS.length - 1].href);
+        return;
+      }
 
-      setIsMenuOpen(false);
-    },
-    []
-  );
+      for (let i = NAV_LINKS.length - 1; i >= 0; i--) {
+        const sectionId = NAV_LINKS[i].href.substring(1);
+        const section = document.getElementById(sectionId);
+        if (section && section.offsetTop <= scrollPos) {
+          setActiveSection(NAV_LINKS[i].href);
+          return;
+        }
+      }
+      setActiveSection("#home");
+    };
+
+    handleScrollSpy();
+    window.addEventListener("scroll", handleScrollSpy, { passive: true });
+    return () => window.removeEventListener("scroll", handleScrollSpy);
+  }, []);
+
+  const handleNavClick = useCallback((e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    setActiveSection(href); // langsung kuning saat diklik
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    setIsMenuOpen(false);
+  }, []);
 
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out ${
-        isScrolled
-          ? "bg-background shadow-lg shadow-black/30"
-          : "bg-transparent"
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
+        isScrolled ? "bg-background shadow-lg shadow-black/30" : "bg-transparent"
       }`}
     >
-      <nav
-        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8"
-        aria-label="Main navigation"
-      >
-        {/* Logo di sisi kiri */}
+      <nav className="flex w-full items-center justify-between px-5 py-3 sm:px-8 lg:px-10">
         <a
           href="#home"
           onClick={(e) => handleNavClick(e, "#home")}
-          className="text-xl font-bold tracking-tight text-text transition-colors duration-300 hover:text-muted"
+          className="shrink-0"
         >
-          Coding<span className="text-primary">Collective</span>
+          <img src={logo} alt="Logo" className="h-10 w-auto md:h-12 lg:h-14" />
         </a>
 
-        {/* Menu desktop, tersembunyi di layar kecil */}
-        <ul className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-medium text-text transition-colors duration-300 hover:text-primary"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+        <ul className="hidden items-center gap-6 lg:flex xl:gap-10">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href;
+            return (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`text-sm font-semibold transition-colors duration-300 xl:text-base ${
+                    isActive ? "text-primary" : "text-text hover:text-primary"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
-
-        {/* Tombol hamburger, hanya tampil di layar kecil (mobile & tablet) */}
         <button
-          type="button"
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="text-text transition-colors duration-300 hover:text-primary md:hidden"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-text hover:text-primary lg:hidden"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
         >
-          {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </nav>
 
-      {/* Menu mobile: animasi buka/tutup menggunakan transisi max-height + opacity */}
+      {/* Menu Mobile */}
       <div
-        id="mobile-menu"
-        className={`overflow-hidden bg-background transition-all duration-300 ease-in-out md:hidden ${
-          isMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+        className={`overflow-hidden bg-background transition-all duration-300 lg:hidden ${
+          isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="flex flex-col gap-1 px-6 pb-4">
@@ -110,7 +114,11 @@ const Navbar = () => {
               <a
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="block rounded-md px-2 py-3 text-sm font-medium text-text transition-colors duration-300 hover:text-primary"
+                className={`block rounded-md px-2 py-3 text-sm font-semibold transition-colors ${
+                  activeSection === link.href
+                    ? "text-primary"
+                    : "text-text hover:text-primary"
+                }`}
               >
                 {link.label}
               </a>
