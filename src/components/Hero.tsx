@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import heroImage from "../assets/hero.png";
+import heroImage from "../assets/Gambar.png";
 
 const HERO_CONTENT = {
   brand: "Coding Collective",
