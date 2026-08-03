@@ -112,7 +112,7 @@ const Services = () => {
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: false, margin: "-80px" }}
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
             className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
           >
@@ -122,7 +122,7 @@ const Services = () => {
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.8, delay: 0.25 }}
             className="mx-auto mt-8 max-w-3xl text-base leading-relaxed text-gray-300 md:text-lg"
           >
@@ -163,7 +163,7 @@ const Services = () => {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
             className="max-w-2xl"
           >
@@ -171,7 +171,7 @@ const Services = () => {
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="h-[2px] w-8 origin-left bg-[#FFC107]"
               />
@@ -194,7 +194,7 @@ const Services = () => {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: false, margin: "-50px" }}
             className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             {SERVICES.map(({ icon: Icon, title, description }, index) => (

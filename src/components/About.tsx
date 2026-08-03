@@ -80,7 +80,7 @@ const About = () => {
         <motion.h2
           initial={{ opacity: 0, scale: 0.9, y: 40 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
           className="relative z-10 px-6 text-center text-6xl font-black tracking-tight text-text sm:text-8xl lg:text-9xl"
         >
@@ -95,7 +95,7 @@ const About = () => {
           <motion.h3
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
             className="text-5xl font-black leading-[1.05] tracking-tight text-text sm:text-7xl"
           >
@@ -108,7 +108,7 @@ const About = () => {
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
             className="lg:text-right"
           >
