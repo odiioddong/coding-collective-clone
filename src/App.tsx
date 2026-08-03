@@ -26,7 +26,7 @@ export default function App() {
       <AnimatePresence>{loading && <Preloader key="preloader" />}</AnimatePresence>
 
       <Navbar />
-      <Hero />
+      <Hero ready={!loading} />
       <About />
       <Partners title="Our Partner" />
       <Works />

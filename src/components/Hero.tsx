@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import heroImage from "../assets/Gambar.png";
+import { motion } from "framer-motion";
+import heroImage from "../assets/hero.png";
 
 const HERO_CONTENT = {
   brand: "Coding Collective",
@@ -7,13 +8,14 @@ const HERO_CONTENT = {
   headline: "Your Go-To Hub for Custom Software & Scalable Tech Teams",
   description:
     "We help businesses build reliable software and scale tech teams efficiently to support long-term growth.",
-  primaryCta: { label: "View Work", href: "#services" },
+  primaryCta: { label: "View Work", href: "#works" },
   secondaryCta: { label: "Book Consultation", href: "#contact" },
 } as const;
 
-/* Hook typewriter: mengetik -> jeda -> menghapus -> ganti frasa. */
+/* Hook typewriter — baru jalan setelah preloader selesai (enabled) */
 const useTypewriter = (
   phrases: readonly string[],
+  enabled: boolean,
   typeSpeed = 90,
   deleteSpeed = 45,
   pauseMs = 2000
@@ -23,6 +25,7 @@ const useTypewriter = (
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     const current = phrases[index % phrases.length];
     let timer: number | undefined;
 
@@ -38,43 +41,55 @@ const useTypewriter = (
       );
     }
     return () => window.clearTimeout(timer);
-  }, [text, deleting, index, phrases, typeSpeed, deleteSpeed, pauseMs]);
+  }, [text, deleting, index, enabled, phrases, typeSpeed, deleteSpeed, pauseMs]);
 
   return text;
 };
 
-const Hero = () => {
-  const typedText = useTypewriter(HERO_CONTENT.typingPhrases);
+const Hero = ({ ready = true }: { ready?: boolean }) => {
+  const typedText = useTypewriter(HERO_CONTENT.typingPhrases, ready);
 
   return (
     <section
       id="home"
       className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-background"
     >
-      <div className="absolute inset-0">
+      {/* Background foto: zoom-in cinematic saat ready */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.15 }}
+        animate={ready ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 1.4, ease: "easeOut" }}
+        className="absolute inset-0"
+      >
         <img
           src={heroImage}
           alt=""
           aria-hidden="true"
-          className="h-full w-full object-cover opacity-70 animate-[heroZoom_25s_ease-in-out_infinite_alternate]"
+          className="h-full w-full object-cover opacity-50 animate-[heroZoom_25s_ease-in-out_infinite_alternate]"
         />
-        {/* Overlay kiri→kanan: ditipiskan biar foto kelihatan, teks kiri tetap aman */}
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-background/10" />
-        {/* Overlay atas→bawah: ditipiskan */}
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/60" />
-      </div>
+      </motion.div>
 
       <div className="relative z-10 w-full px-5 pb-28 pt-36 sm:px-8 lg:px-10 lg:pb-32 lg:pt-40">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <h1 className="flex-shrink-0 text-[36px] font-extrabold leading-[1.05] tracking-tight text-text sm:text-[48px] lg:text-[64px] xl:text-[72px]">
+          {/* Judul: slide up pertama */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={ready ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            className="flex-shrink-0 text-[36px] font-extrabold leading-[1.05] tracking-tight text-text sm:text-[48px] lg:text-[64px] xl:text-[72px]"
+          >
             {HERO_CONTENT.brand}
-            <span className="align-super text-[0.42em] font-bold text-primary">
-              ®
-            </span>
-          </h1>
+            <span className="align-super text-[0.42em] font-bold text-primary">®</span>
+          </motion.h1>
 
-          <p
-            className="flex-shrink-0 whitespace-nowrap text-[22px] font-bold text-text sm:text-[28px] lg:text-[36px] xl:text-[44px]"
+          {/* Typewriter: muncul setelah judul */}
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={ready ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+            className="flex-shrink-0 whitespace-nowrap text-[18px] font-bold text-text sm:text-[28px] lg:text-[36px] xl:text-[44px]"
             aria-label={HERO_CONTENT.typingPhrases[0]}
           >
             {typedText}
@@ -82,35 +97,49 @@ const Hero = () => {
               aria-hidden="true"
               className="ml-2 inline-block h-[0.9em] w-[5px] translate-y-[0.12em] bg-primary animate-[blink_1s_step-end_infinite]"
             />
-          </p>
+          </motion.p>
         </div>
 
         <div className="mt-12 max-w-3xl lg:mt-20">
-          <p className="text-lg leading-snug text-text/90 md:text-xl">
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={ready ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}
+            className="text-lg leading-snug text-text/90 md:text-xl"
+          >
             {HERO_CONTENT.headline}
-          </p>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={ready ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.65, ease: "easeOut" }}
+            className="mt-3 max-w-2xl text-base leading-relaxed text-muted md:text-lg"
+          >
             {HERO_CONTENT.description}
-          </p>
+          </motion.p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={ready ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
+            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
+          >
             <a
               href={HERO_CONTENT.primaryCta.href}
-              className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-text backdrop-blur-sm transition-colors duration-300 hover:border-white/40 hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-text backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/10 active:scale-95"
             >
               {HERO_CONTENT.primaryCta.label}
             </a>
             <a
               href={HERO_CONTENT.secondaryCta.href}
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-4 text-base font-bold text-background transition-colors duration-300 hover:bg-primary-hover"
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-8 py-4 text-base font-bold text-background transition-all duration-300 hover:bg-primary-hover active:scale-95"
             >
               {HERO_CONTENT.secondaryCta.label}
             </a>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Copyright juga diangkat biar di atas foto */}
       <p className="absolute bottom-24 right-6 z-10 text-sm text-muted">
         © {new Date().getFullYear()} Coding Collective
       </p>
