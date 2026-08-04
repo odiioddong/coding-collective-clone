@@ -61,12 +61,12 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300 ${
-        isScrolled ? "bg-background shadow-lg shadow-black/30" : "bg-transparent"
-      }`}
-    >
-      <nav className="flex w-full items-center justify-between px-5 py-3 sm:px-8 lg:px-10">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          isScrolled ? "bg-background shadow-lg shadow-black/30" : "bg-transparent"
+        }`}
+      >
+      <nav className="mx-auto flex h-20 w-full items-center justify-between px-5 sm:px-8 lg:px-10">
         <a
           href="#home"
           onClick={(e) => handleNavClick(e, "#home")}

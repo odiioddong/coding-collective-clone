@@ -71,8 +71,8 @@ const Hero = ({ ready = true }: { ready?: boolean }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-background/60" />
       </motion.div>
 
-      <div className="relative z-10 w-full px-5 pb-28 pt-36 sm:px-8 lg:px-10 lg:pb-32 lg:pt-40">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+      <div className="relative z-10 w-full px-5 pb-28 pt-28 sm:px-8 lg:px-10 lg:pb-32 lg:pt-32">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           {/* Judul: slide up pertama */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
@@ -122,7 +122,7 @@ const Hero = ({ ready = true }: { ready?: boolean }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={ready ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.8, ease: "easeOut" }}
-            className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
+            className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center"
           >
             <a
               href={HERO_CONTENT.primaryCta.href}

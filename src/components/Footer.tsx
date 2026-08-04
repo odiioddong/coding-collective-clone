@@ -28,6 +28,10 @@ const Footer = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSent(true);
+
+    setTimeout(()=>{
+      setSent(false)
+    },2500)
   };
 
   return (

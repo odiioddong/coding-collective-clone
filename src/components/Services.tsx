@@ -108,7 +108,7 @@ const Services = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#050505]/20 to-[#050505]" />
 
         {/* Teks intro di tengah */}
-        <div className="relative z-10 mx-auto max-w-4xl px-6 py-24 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl px-6 py-20 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
